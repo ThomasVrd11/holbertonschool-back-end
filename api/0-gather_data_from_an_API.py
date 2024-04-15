@@ -1,4 +1,4 @@
-#!usr/bin/python3
+#!/usr/bin/python3
 
 """ Python script that using the rest api, for a given empliyéé, returns info about his her todo list progress"""
 
