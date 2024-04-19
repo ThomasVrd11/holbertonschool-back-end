@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Script to fetch and export employee TODO list
-progress from a REST API to CSV"""
-import csv
+progress from a REST API to JSON"""
+import json
 import requests
 import sys
 
@@ -24,11 +24,14 @@ if __name__ == "__main__":
         print("RequestError:", 404)
         sys.exit(1)
 
-    USERNAME = data[0]["user"]["username"]
+    USER_TASK = {EMPLOYEE_ID: []}
+    for task in data:
+        task_dict = {
+            "task": task["title"],
+            "completed": task["completed"],
+            "username": task["user"]["username"]
+        }
+        USER_TASK[EMPLOYEE_ID].append(task_dict)
 
-    with open(f"{EMPLOYEE_ID}.csv", "w", newline="") as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_NONNUMERIC)
-        for task in data:
-            writer.writerow(
-                [EMPLOYEE_ID, USERNAME, str(task["completed"]), task["title"]]
-            )
+    with open(f"{EMPLOYEE_ID}.json", "w") as file:
+        json.dump(USER_TASK, file)
